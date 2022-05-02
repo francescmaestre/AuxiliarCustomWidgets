@@ -98,9 +98,7 @@ void FileDiffView::addNumberArea(LineNumberArea *numberArea)
 
 void FileDiffView::loadDiff(const QString &text, const QVector<ChunkDiffInfo::ChunkInfo> &fileDiffInfo)
 {
-   QLog_Trace("UI",
-              QString("FileDiffView::loadDiff - {%1} move scroll to pos {%2}")
-                  .arg(objectName(), QString::number(verticalScrollBar()->value())));
+   QLog_Trace("UI", QString("FileDiffView::loadDiff"));
 
    mFileDiffInfo = fileDiffInfo;
 
@@ -108,10 +106,18 @@ void FileDiffView::loadDiff(const QString &text, const QVector<ChunkDiffInfo::Ch
 
    const auto pos = verticalScrollBar()->value();
    auto cursor = textCursor();
-   const auto tmpCursor = textCursor().position();
+
+   const auto cursorBlock = cursor.blockNumber();
+   const auto textInBlock = cursor.block().text();
+   const auto charsInBlock = textInBlock.count();
+   const auto posInBlock = cursor.positionInBlock();
+   const auto totalBlocks = blockCount();
+
    setPlainText(text);
 
-   cursor.setPosition(tmpCursor);
+   if (totalBlocks <= cursorBlock || charsInBlock < posInBlock)
+      return;
+
    setTextCursor(cursor);
 
    blockSignals(true);
