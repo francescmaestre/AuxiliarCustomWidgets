@@ -53,3 +53,7 @@ static const QColor jenkinsResultSuccess(0, 175, 24); //#00AF18
 static const QColor jenkinsResultFailure(193, 32, 32); //#C12020
 static const QColor jenkinsResultAborted(91, 91, 91); //#5B5B5B
 static const QColor jenkinsResultNotBuilt(200, 200, 200); //#C8C8C8
+static const QColor editorGreenShadowBright(141, 201, 68, 255 * 0.65);
+static const QColor editorGreenShadowDark(141, 201, 68, 255 * 0.45);
+static const QColor editorRedShadowBright(255, 85, 85, 255 * 0.65);
+static const QColor editorRedShadowDark(255, 85, 85, 255 * 0.45);
