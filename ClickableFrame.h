@@ -82,11 +82,15 @@ protected:
     */
    void mouseReleaseEvent(QMouseEvent *e) override;
 
-   /**
-    * @brief enterEvent Detects the enter event and in case the link style is enabled it applies it.
-    * @param event The event.
-    */
+/**
+ * @brief enterEvent Detects the enter event and in case the link style is enabled it applies it.
+ * @param event The event.
+ */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    void enterEvent(QEvent *event) override;
+#else
+   void enterEvent(QEnterEvent *event) override;
+#endif
 
    /**
     * @brief leaveEvent Detects the leave event and in case the link style is enabled it removes the underline.

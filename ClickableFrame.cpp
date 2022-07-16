@@ -1,9 +1,9 @@
 #include "ClickableFrame.h"
 
-#include <QMouseEvent>
-#include <QVBoxLayout>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QStyle>
+#include <QVBoxLayout>
 
 ClickableFrame::ClickableFrame(QWidget *parent)
    : QFrame(parent)
@@ -38,7 +38,11 @@ void ClickableFrame::mouseReleaseEvent(QMouseEvent *e)
    QFrame::mouseReleaseEvent(e);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void ClickableFrame::enterEvent(QEvent *event)
+#else
+void ClickableFrame::enterEvent(QEnterEvent *event)
+#endif
 {
    if (mHasLinkStyles)
    {
