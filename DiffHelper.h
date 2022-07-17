@@ -60,7 +60,12 @@ inline QVector<DiffChange> splitDiff(const QString &diff)
 {
    QVector<DiffChange> changes;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
    const auto flag = Qt::SkipEmptyParts;
+#else
+   const auto flag = QString::SkipEmptyParts;
+#endif
+
    const auto chunks = diff.split("diff --git", flag);
 
    for (const auto &chunk : chunks)
