@@ -49,8 +49,7 @@ void LineNumberArea::paintEvent(QPaintEvent *event)
    {
       if (block.isVisible() && bottom >= event->rect().top())
       {
-         const auto textColor
-             = QSettings().value("colorSchema", "dark").toString() == "bright" ? textColorBright : textColorDark;
+         const auto textColor = QSettings().value("colorSchema", 0).toInt() == 1 ? textColorBright : textColorDark;
 
          painter.setPen(textColor);
 

@@ -8,9 +8,9 @@
 FileDiffHighlighter::FileDiffHighlighter(QTextDocument *document)
    : QSyntaxHighlighter(document)
 {
-   const auto colorScheme = QSettings().value("colorSchema", "dark").toString();
-   mShadowGreen = colorScheme == "dark" ? editorGreenShadowDark : editorGreenShadowBright;
-   mShadowRed = colorScheme == "dark" ? editorRedShadowDark : editorRedShadowBright;
+   const auto colorScheme = QSettings().value("colorSchema", 0).toInt();
+   mShadowGreen = colorScheme == 0 ? editorGreenShadowDark : editorGreenShadowBright;
+   mShadowRed = colorScheme == 0 ? editorRedShadowDark : editorRedShadowBright;
 }
 
 void FileDiffHighlighter::highlightBlock(const QString &text)
