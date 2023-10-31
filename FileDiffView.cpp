@@ -109,7 +109,7 @@ void FileDiffView::loadDiff(const QString &text, const QVector<ChunkDiffInfo::Ch
 
    const auto cursorBlock = cursor.blockNumber();
    const auto textInBlock = cursor.block().text();
-   const auto charsInBlock = textInBlock.count();
+   const auto charsInBlock = textInBlock.length();
    const auto posInBlock = cursor.positionInBlock();
    const auto totalBlocks = blockCount();
 
@@ -235,7 +235,7 @@ bool FileDiffView::eventFilter(QObject *obj, QEvent *event)
          const auto textRow = cursor.block().blockNumber();
          auto found = false;
 
-         for (const auto &diff : qAsConst(mFileDiffInfo))
+         for (const auto &diff : std::as_const(mFileDiffInfo))
          {
             if (textRow + 1 >= diff.startLine && textRow + 1 <= diff.endLine)
             {

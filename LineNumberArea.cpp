@@ -118,7 +118,7 @@ void LineNumberArea::mouseMoveEvent(QMouseEvent *e)
             const auto textRow = cursor.block().blockNumber();
             auto found = false;
 
-            for (const auto &diff : qAsConst(fileDiffWidget->mFileDiffInfo))
+            for (const auto &diff : std::as_const(fileDiffWidget->mFileDiffInfo))
             {
                if (textRow + 1 >= diff.startLine && textRow + 1 <= diff.endLine)
                {

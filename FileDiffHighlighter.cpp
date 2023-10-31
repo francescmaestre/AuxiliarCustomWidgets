@@ -23,7 +23,7 @@ void FileDiffHighlighter::highlightBlock(const QString &text)
 
    if (!mFileDiffInfo.isEmpty())
    {
-      for (const auto &diff : qAsConst(mFileDiffInfo))
+      for (const auto &diff : std::as_const(mFileDiffInfo))
       {
          if (diff.startLine <= currentLine && currentLine <= diff.endLine)
          {
