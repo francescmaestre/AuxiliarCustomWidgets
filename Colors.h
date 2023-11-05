@@ -38,10 +38,13 @@ static const QColor graphBlueDark(87, 155, 213); //#579BD5
 static const QColor graphBlueBright(50, 92, 199); //#325CC7
 static const QColor graphRed(255, 34, 34); //#FF2222
 static const QColor graphGreen(101, 149, 43); //#65952B
+static const QColor graphPastel(205, 144, 119); //#CD9077
 static const QColor graphOrange(255, 147, 32); //#FF9320
 static const QColor graphGrey(132, 132, 132); //#848484
+static const QColor graphTurquoise(64, 224, 208); //#40E0D0
+static const QColor graphAubergine(71, 1, 115); //#470173
 static const QColor graphPink(255, 121, 198); //#FF79C6
-static const QColor graphPastel(205, 144, 119); //#CD9077
+static const QColor graphCoral(230, 94, 108); //#E65E6C
 static const QColor graphCurrentBranch(0, 91, 150); //#005B96
 static const QColor graphLocalBranch(100, 151, 177); //#6497B1
 static const QColor graphRemoteBranch(1, 31, 75); //#011F4B
