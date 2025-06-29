@@ -2,6 +2,7 @@ file(GLOB SRC_FILES
   *.cpp
   *.h
   *.ui
+  *.qrc
 )
 
 
