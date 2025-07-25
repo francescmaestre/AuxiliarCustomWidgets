@@ -38,11 +38,7 @@ void ClickableFrame::mouseReleaseEvent(QMouseEvent *e)
    QFrame::mouseReleaseEvent(e);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void ClickableFrame::enterEvent(QEvent *event)
-#else
 void ClickableFrame::enterEvent(QEnterEvent *event)
-#endif
 {
    if (mHasLinkStyles)
    {

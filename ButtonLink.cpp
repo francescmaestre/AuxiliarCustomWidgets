@@ -35,11 +35,7 @@ void ButtonLink::mouseReleaseEvent(QMouseEvent *event)
       emit clicked();
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void ButtonLink::enterEvent(QEvent *event)
-#else
 void ButtonLink::enterEvent(QEnterEvent *event)
-#endif
 {
    Q_UNUSED(event);
 
