@@ -1,63 +1,203 @@
 #include "ClickableFrame.h"
 
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QMouseEvent>
-#include <QStyle>
 #include <QVBoxLayout>
 
 ClickableFrame::ClickableFrame(QWidget *parent)
    : QFrame(parent)
 {
-   setAttribute(Qt::WA_DeleteOnClose);
+   setupLayout();
 }
 
-ClickableFrame::ClickableFrame(const QString &text, Qt::Alignment alignment, QWidget *parent)
+ClickableFrame::ClickableFrame(const QString &title, QWidget *parent)
    : QFrame(parent)
+   , mTitle(title)
 {
-   const auto layout = new QVBoxLayout(this);
-   layout->setContentsMargins(2, 2, 2, 2);
-   layout->setSpacing(0);
-   layout->addWidget(mText = new QLabel(text));
-   layout->setAlignment(alignment);
+   setupLayout();
+   setTitle(title);
+}
 
-   mText->setTextFormat(Qt::RichText);
+void ClickableFrame::setupLayout()
+{
+   mMainLayout = new QVBoxLayout(this);
+   mMainLayout->setContentsMargins(0, 0, 0, 0);
+   mMainLayout->setSpacing(0);
+
+   mHeaderWidget = new QWidget();
+   mHeaderLayout = new QHBoxLayout(mHeaderWidget);
+   mHeaderLayout->setContentsMargins(10, 5, 10, 5);
+   mHeaderLayout->setSpacing(5);
+
+   mTitleLabel = new QLabel();
+   mTitleLabel->setTextFormat(Qt::RichText);
+
+   mArrowLabel = new QLabel();
+   mArrowLabel->setFixedSize(16, 16);
+
+   mHeaderLayout->addWidget(mTitleLabel);
+   mHeaderLayout->addStretch();
+   mHeaderLayout->addWidget(mArrowLabel);
+
+   mMainLayout->addWidget(mHeaderWidget);
+
+   setAttribute(Qt::WA_DeleteOnClose);
+   setObjectName("ClickableFrame");
+
+   updateArrowIcon();
+}
+
+void ClickableFrame::setTitle(const QString &title)
+{
+   mTitle = title;
+   updateTitleWithCount();
+}
+
+QString ClickableFrame::title() const
+{
+   return mTitle;
+}
+
+void ClickableFrame::setCount(int count)
+{
+   setCount(QString::number(count));
+}
+
+void ClickableFrame::setCount(const QString &count)
+{
+   mCount = count;
+   updateTitleWithCount();
+}
+
+void ClickableFrame::updateTitleWithCount()
+{
+   if (mTitleLabel)
+   {
+      QString displayText = mTitle;
+      if (!mCount.isEmpty() && mCount != "0")
+      {
+         displayText = QString("<b>%1</b> <span style='color: #808080;'>(%2)</span>")
+                           .arg(mTitle)
+                           .arg(mCount);
+      }
+      else if (!mCount.isEmpty())
+      {
+         displayText = QString("<b>%1</b> <span style='color: #808080;'>(0)</span>").arg(mTitle);
+      }
+      else
+      {
+         displayText = QString("<b>%1</b>").arg(mTitle);
+      }
+      mTitleLabel->setText(displayText);
+   }
+}
+
+void ClickableFrame::setContentWidget(QWidget *content)
+{
+   if (mContentWidget)
+   {
+      mMainLayout->removeWidget(mContentWidget);
+      mContentWidget->deleteLater();
+   }
+
+   mContentWidget = content;
+   if (mContentWidget)
+   {
+      mMainLayout->addWidget(mContentWidget);
+      mContentWidget->setVisible(mIsExpanded);
+   }
+}
+
+void ClickableFrame::setExpandable(bool expandable)
+{
+   mIsExpandable = expandable;
+   setCursor(expandable ? Qt::PointingHandCursor : Qt::ArrowCursor);
+   mArrowLabel->setVisible(expandable && mShowArrow);
+   updateArrowIcon();
+}
+
+void ClickableFrame::showExpandArrow(bool show)
+{
+   mShowArrow = show;
+   mArrowLabel->setVisible(mIsExpandable && show);
+}
+
+void ClickableFrame::setExpanded(bool _expanded)
+{
+   if (mIsExpanded != _expanded)
+   {
+      mIsExpanded = _expanded;
+      updateExpandedState();
+      updateArrowIcon();
+      emit expanded(mIsExpanded);
+   }
+}
+
+void ClickableFrame::updateExpandedState()
+{
+   if (mContentWidget)
+   {
+      mContentWidget->setVisible(mIsExpanded);
+   }
+}
+
+void ClickableFrame::updateArrowIcon()
+{
+   if (mArrowLabel && mIsExpandable && mShowArrow)
+   {
+      const auto icon = QIcon(mIsExpanded ? ":/icons/remove" : ":/icons/add");
+      mArrowLabel->setPixmap(icon.pixmap(QSize(16, 16)));
+   }
 }
 
 void ClickableFrame::mousePressEvent(QMouseEvent *e)
 {
-   mPressed = rect().contains(e->pos()) && e->button() == Qt::LeftButton;
-
+   if (e->button() == Qt::LeftButton)
+   {
+      if (!mHeaderWidget || mHeaderWidget->geometry().contains(e->pos()))
+      {
+         mPressed = true;
+      }
+   }
    QFrame::mousePressEvent(e);
 }
 
 void ClickableFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-   if (mPressed && rect().contains(e->pos()) && e->button() == Qt::LeftButton)
-      emit clicked();
-
+   if (mPressed && e->button() == Qt::LeftButton)
+   {
+      if (!mHeaderWidget || mHeaderWidget->geometry().contains(e->pos()))
+      {
+         if (mIsExpandable)
+         {
+            setExpanded(!mIsExpanded);
+         }
+         emit clicked();
+      }
+   }
+   mPressed = false;
    QFrame::mouseReleaseEvent(e);
 }
 
 void ClickableFrame::enterEvent(QEnterEvent *event)
 {
-   if (mHasLinkStyles)
+   if (mHasLinkStyles && mTitleLabel)
    {
-      QFont f = mText->font();
+      QFont f = mTitleLabel->font();
       f.setUnderline(true);
-      mText->setFont(f);
+      mTitleLabel->setFont(f);
    }
-
    QFrame::enterEvent(event);
 }
 
 void ClickableFrame::leaveEvent(QEvent *event)
 {
-   if (mHasLinkStyles)
+   if (mHasLinkStyles && mTitleLabel)
    {
-      QFont f = mText->font();
+      QFont f = mTitleLabel->font();
       f.setUnderline(false);
-      mText->setFont(f);
+      mTitleLabel->setFont(f);
    }
-
    QFrame::leaveEvent(event);
 }
