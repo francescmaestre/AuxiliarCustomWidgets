@@ -31,12 +31,12 @@ void ClickableFrame::setupLayout()
    mHeaderLayout->setSpacing(5);
 
    mTitleLabel = new QLabel();
-   mTitleLabel->setTextFormat(Qt::RichText);
-
+   mCountLabel = new QLabel();
    mArrowLabel = new QLabel();
    mArrowLabel->setFixedSize(16, 16);
 
    mHeaderLayout->addWidget(mTitleLabel);
+   mHeaderLayout->addWidget(mCountLabel);
    mHeaderLayout->addStretch();
    mHeaderLayout->addWidget(mArrowLabel);
 
@@ -51,7 +51,7 @@ void ClickableFrame::setupLayout()
 void ClickableFrame::setTitle(const QString &title)
 {
    mTitle = title;
-   updateTitleWithCount();
+   mTitleLabel->setText(QString("<b>%1</b>").arg(title));
 }
 
 QString ClickableFrame::title() const
@@ -61,12 +61,7 @@ QString ClickableFrame::title() const
 
 void ClickableFrame::setCount(int count)
 {
-   setCount(QString::number(count));
-}
-
-void ClickableFrame::setCount(const QString &count)
-{
-   mCount = count;
+   mCount = QString::number(count);
    updateTitleWithCount();
 }
 
@@ -77,19 +72,15 @@ void ClickableFrame::updateTitleWithCount()
       QString displayText = mTitle;
       if (!mCount.isEmpty() && mCount != "0")
       {
-         displayText = QString("<b>%1</b> <span style='color: #808080;'>(%2)</span>")
-                           .arg(mTitle)
+         displayText = QString("(%1)")
                            .arg(mCount);
       }
       else if (!mCount.isEmpty())
       {
-         displayText = QString("<b>%1</b> <span style='color: #808080;'>(0)</span>").arg(mTitle);
+         displayText = QString("(0)");
       }
-      else
-      {
-         displayText = QString("<b>%1</b>").arg(mTitle);
-      }
-      mTitleLabel->setText(displayText);
+
+      mCountLabel->setText(displayText);
    }
 }
 

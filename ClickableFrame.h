@@ -45,6 +45,7 @@ protected:
 private:
    QWidget *mHeaderWidget = nullptr;
    QLabel *mTitleLabel = nullptr;
+   QLabel *mCountLabel = nullptr;
    QLabel *mArrowLabel = nullptr;
    QHBoxLayout *mHeaderLayout = nullptr;
 
