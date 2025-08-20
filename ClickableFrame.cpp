@@ -1,6 +1,7 @@
 #include "ClickableFrame.h"
 
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QVBoxLayout>
