@@ -1,4 +1,5 @@
-#include "ButtonLink.hpp"
+#include <ButtonLink.h>
+
 #include <QApplication>
 #include <QStyle>
 

@@ -8,7 +8,7 @@
 
 namespace
 {
-static std::array<const char *, 6> indicators { ":/icons/qcb",   ":/icons/qcb_c",   ":/icons/qcb_i",
+static std::array<const char *, 6> indicators { ":/icons/qcb", ":/icons/qcb_c", ":/icons/qcb_i",
                                                 ":/icons/qcb_d", ":/icons/qcb_d_c", ":/icons/qcb_d_i" };
 }
 
