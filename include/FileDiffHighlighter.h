@@ -42,7 +42,7 @@ public:
 
     \param document The document to parse.
    */
-   explicit FileDiffHighlighter(QTextDocument *document);
+   explicit FileDiffHighlighter(QColor additionColor, QColor removalColor, QColor commentColor, QTextDocument *document);
 
    /*!
     \brief Analyses a block of text and applies the syntax highlighter.
@@ -61,4 +61,5 @@ private:
    QVector<ChunkDiffInfo::ChunkInfo> mFileDiffInfo;
    QColor mShadowGreen;
    QColor mShadowRed;
+   QColor mCommentColor;
 };

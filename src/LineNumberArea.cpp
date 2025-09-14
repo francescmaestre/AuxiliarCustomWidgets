@@ -1,6 +1,5 @@
 #include <LineNumberArea.h>
 
-#include <Colors.h>
 #include <FileDiffView.h>
 #include <QSettings>
 
@@ -8,9 +7,11 @@
 #include <QPainter>
 #include <QTextBlock>
 
-LineNumberArea::LineNumberArea(FileDiffView *editor, bool allowComments, bool skipDeletions)
+LineNumberArea::LineNumberArea(FileDiffView *editor, QColor textColor, bool allowComments, QColor commentColor, bool skipDeletions)
    : QWidget(editor)
+   , mTextColor(textColor)
    , mCommentsAllowed(allowComments)
+   , mCommentsColor(commentColor)
    , mSkipDeletions(skipDeletions)
 {
    fileDiffWidget = editor;
@@ -49,9 +50,7 @@ void LineNumberArea::paintEvent(QPaintEvent *event)
    {
       if (block.isVisible() && bottom >= event->rect().top())
       {
-         const auto textColor = QSettings().value("colorSchema", 0).toInt() == 1 ? textColorBright : textColorDark;
-
-         painter.setPen(textColor);
+         painter.setPen(mTextColor);
 
          const auto number = blockNumber + lineCorrection;
          const auto height = fileDiffWidget->fontMetrics().height();
@@ -63,14 +62,14 @@ void LineNumberArea::paintEvent(QPaintEvent *event)
                painter.drawPixmap(6, static_cast<int>(top), height, height,
                                   QIcon(":/icons/comments").pixmap(height, height));
 
-               painter.setPen(gitQlientOrange);
+               painter.setPen(mCommentsColor);
             }
             else if (fileDiffWidget->mRow == number)
             {
                painter.drawPixmap(width() - height - fontWidth, static_cast<int>(top), height, height,
                                   QIcon(":/icons/add_comment").pixmap(height, height));
 
-               painter.setPen(gitQlientOrange);
+               painter.setPen(mCommentsAllowed);
             }
          }
 

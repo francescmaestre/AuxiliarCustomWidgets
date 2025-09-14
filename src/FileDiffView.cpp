@@ -54,17 +54,18 @@
 #include <FileDiffHighlighter.h>
 #include <LineNumberArea.h>
 
-#include <QLogger.h>
+#include <QLogger>
 
 #include <QMenu>
 #include <QScrollBar>
 
 using namespace QLogger;
 
-FileDiffView::FileDiffView(QWidget *parent)
+FileDiffView::FileDiffView(QColor additionColor, QColor removalColor, QColor commentColor, QWidget *parent)
    : QPlainTextEdit(parent)
-   , mDiffHighlighter(new FileDiffHighlighter(document()))
 {
+   mDiffHighlighter = new FileDiffHighlighter(additionColor, removalColor, commentColor, document());
+
    setAttribute(Qt::WA_DeleteOnClose);
    setReadOnly(true);
    setContextMenuPolicy(Qt::CustomContextMenu);

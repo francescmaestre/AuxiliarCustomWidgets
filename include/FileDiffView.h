@@ -81,7 +81,7 @@ public:
 
     \param parent The parent widget if needed.
    */
-   explicit FileDiffView(QWidget *parent = nullptr);
+   explicit FileDiffView(QColor additionColor, QColor removalColor, QColor commentColor, QWidget *parent = nullptr);
 
    /**
     * @brief Default constructor

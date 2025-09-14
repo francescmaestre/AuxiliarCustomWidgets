@@ -1,16 +1,14 @@
 #include "FileDiffHighlighter.h"
 
-#include <Colors.h>
-
 #include <QSettings>
 #include <QTextDocument>
 
-FileDiffHighlighter::FileDiffHighlighter(QTextDocument *document)
+FileDiffHighlighter::FileDiffHighlighter(QColor additionColor, QColor removalColor, QColor commentColor, QTextDocument *document)
    : QSyntaxHighlighter(document)
+   , mShadowGreen(additionColor)
+   , mShadowRed(removalColor)
+   , mCommentColor(commentColor)
 {
-   const auto colorScheme = QSettings().value("colorSchema", 0).toInt();
-   mShadowGreen = colorScheme == 0 ? editorGreenShadowDark : editorGreenShadowBright;
-   mShadowRed = colorScheme == 0 ? editorRedShadowDark : editorRedShadowBright;
 }
 
 void FileDiffHighlighter::highlightBlock(const QString &text)
@@ -39,7 +37,7 @@ void FileDiffHighlighter::highlightBlock(const QString &text)
       switch (text.at(0).toLatin1())
       {
          case '@':
-            myFormat.setBackground(graphOrange);
+            myFormat.setBackground(mCommentColor);
             format.setFontWeight(QFont::ExtraBold);
             break;
          case '+':
